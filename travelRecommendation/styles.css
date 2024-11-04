@@ -1,0 +1,117 @@
+/* styles.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('milan.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    color: #ffffff;
+}
+
+nav {
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente */
+    padding: 1em;
+    text-align: center;
+}
+
+nav a {
+    color: #ffffff;
+    margin: 0 1em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 100px); /* Ajusta el espacio teniendo en cuenta el nav */
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0.2em 0;
+}
+
+p {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.social-media {
+    position: fixed;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+}
+
+.social-media ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-media ul li {
+    margin: 10px 0;
+}
+
+.social-media ul li a img {
+    width: 30px; /* Tamaño del icono */
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.social-media ul li a img:hover {
+    transform: scale(1.2); /* Efecto de agrandamiento al pasar el ratón */
+}
+
+.team-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; /* Para que los miembros se ajusten si la pantalla es pequeña */
+  }
+
+.members{
+    border: 1px solid #ddd;
+      padding: 20px;
+      width: 200px; /* Ajusta según el espacio que quieras que ocupen */
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+  .form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
