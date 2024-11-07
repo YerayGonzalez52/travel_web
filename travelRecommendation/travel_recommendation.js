@@ -1,52 +1,45 @@
 const btnSearch = document.getElementById('btnSearch');
 
 function recommendationResult() {
-    // Obtener el valor del input de búsqueda
     const input = document.getElementById("travelInput").value.toLowerCase();
-    console.log("Buscando:", input);  // Verifica lo que se está buscando
-
     const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '';  // Limpiar resultados previos
+    resultDiv.innerHTML = '';
 
-    if (!input) {
-        resultDiv.innerHTML = 'Please enter a destination or keyword.';
-        return;
-    }
-
-    // Hacer fetch al archivo JSON
     fetch("travel_recommendation_api.json")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la carga del archivo JSON');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Datos obtenidos:", data);  // Verifica si el archivo JSON es correcto
+    .then(response => response.json())
+    .then(data => {
+        // Buscar en las ciudades de cada país
+        let destination = null;
 
-            // Buscar la ciudad que coincida con la entrada
-            const destination = data.countries
-                .flatMap(country => country.cities)
-                .find(city => city.name.toLowerCase().includes(input));  // Compara en minúsculas
+        // Buscar en las ciudades
+        for (let country of data.countries) {
+            destination = country.cities.find(city => city.name.toLowerCase().includes(input));
+            if (destination) break;
+        }
 
-            // Verificar si se encontró una coincidencia
-            if (destination) {
-                const image = destination.imageUrl;
-                const name = destination.name;
-                const description = destination.description;
+        // Buscar en los templos
+        if (!destination) {
+            destination = data.temples.find(temple => temple.name.toLowerCase().includes(input));
+        }
 
-                resultDiv.innerHTML += `<img src="${image}" alt="${name}">`;
-                resultDiv.innerHTML += `<h2>${name}</h2>`;
-                resultDiv.innerHTML += `<p>${description}</p>`;
-            } else {
-                resultDiv.innerHTML = 'No destination found matching your search.';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            resultDiv.innerHTML = 'An error occurred while fetching data.';
-        });
+        // Buscar en las playas
+        if (!destination) {
+            destination = data.beaches.find(beach => beach.name.toLowerCase().includes(input));
+        }
+
+        // Mostrar resultados
+        if (destination) {
+            resultDiv.innerHTML += `<img src="${destination.imageUrl}" alt="${destination.name}">`;
+            resultDiv.innerHTML += `<h2>${destination.name}</h2>`;
+            resultDiv.innerHTML += `<p>${destination.description}</p>`;
+        } else {
+            resultDiv.innerHTML = 'Destination not found.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        resultDiv.innerHTML = 'An error occurred while fetching data.';
+    });
 }
 
-// Evento de clic en el botón de búsqueda
 btnSearch.addEventListener('click', recommendationResult);
