@@ -1,4 +1,5 @@
 const btnSearch = document.getElementById('btnSearch');
+const btnClear = document.getElementById('btnClear');
 
 function recommendationResult() {
     const input = document.getElementById("travelInput").value.toLowerCase();
@@ -8,30 +9,34 @@ function recommendationResult() {
     fetch("travel_recommendation_api.json")
     .then(response => response.json())
     .then(data => {
-        // Buscar en las ciudades de cada país
-        let destination = null;
+        // Array para almacenar todas las coincidencias
+        let destinations = [];
 
-        // Buscar en las ciudades
-        for (let country of data.countries) {
-            destination = country.cities.find(city => city.name.toLowerCase().includes(input));
-            if (destination) break;
-        }
+        // Buscar en las ciudades de cada país
+        data.countries.forEach(country => {
+            const matchingCities = country.cities.filter(city => city.name.toLowerCase().includes(input));
+            destinations = destinations.concat(matchingCities);
+        });
 
         // Buscar en los templos
-        if (!destination) {
-            destination = data.temples.find(temple => temple.name.toLowerCase().includes(input));
-        }
+        const matchingTemples = data.temples.filter(temple => temple.name.toLowerCase().includes(input));
+        destinations = destinations.concat(matchingTemples);
 
         // Buscar en las playas
-        if (!destination) {
-            destination = data.beaches.find(beach => beach.name.toLowerCase().includes(input));
-        }
+        const matchingBeaches = data.beaches.filter(beach => beach.name.toLowerCase().includes(input));
+        destinations = destinations.concat(matchingBeaches);
 
         // Mostrar resultados
-        if (destination) {
-            resultDiv.innerHTML += `<img src="${destination.imageUrl}" alt="${destination.name}">`;
-            resultDiv.innerHTML += `<h2>${destination.name}</h2>`;
-            resultDiv.innerHTML += `<p>${destination.description}</p>`;
+        if (destinations.length > 0) {
+            destinations.forEach(destination => {
+                resultDiv.innerHTML += `
+                    <div class="destination">
+                        <img src="${destination.imageUrl}" alt="${destination.name}">
+                        <h2>${destination.name}</h2>
+                        <p>${destination.description}</p>
+                    </div>
+                `;
+            });
         } else {
             resultDiv.innerHTML = 'Destination not found.';
         }
@@ -42,4 +47,10 @@ function recommendationResult() {
     });
 }
 
+function clearResults(){
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '';
+}
+
 btnSearch.addEventListener('click', recommendationResult);
+btnClear.addEventListener('click', clearResults);
